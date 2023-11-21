@@ -1,10 +1,8 @@
 package models
 
 import (
-	"fmt"
-
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/dynamodb"
+	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 )
 
 type Note struct {
@@ -16,13 +14,21 @@ type Note struct {
 	UpdatedAt int64  `json:"updatedAt"`
 }
 
-func (n *Note) ConvertToDynamodbAttributes() map[string]*dynamodb.AttributeValue {
-	return map[string]*dynamodb.AttributeValue{
-		"id":        {S: aws.String(n.ID)},
-		"claimId":   {S: aws.String(n.ClaimID)},
-		"body":      {S: aws.String(n.Body)},
-		"creatorId": {S: aws.String(n.CreatorID)},
-		"createdAt": {N: aws.String(fmt.Sprintf("%d", n.CreatedAt))},
-		"updatedAt": {N: aws.String(fmt.Sprintf("%d", n.UpdatedAt))},
+func (n *Note) ConvertToDynamodbAttributes() (map[string]types.AttributeValue, error) {
+	// Create a map using JSON field names
+	noteMap := map[string]interface{}{
+		"id":        n.ID,
+		"claimId":   n.ClaimID,
+		"body":      n.Body,
+		"creatorId": n.CreatorID,
+		"createdAt": n.CreatedAt,
+		"updatedAt": n.UpdatedAt,
 	}
+
+	av, err := attributevalue.MarshalMap(noteMap)
+	if err != nil {
+		return nil, err
+	}
+
+	return av, nil
 }

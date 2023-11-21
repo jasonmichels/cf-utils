@@ -3,8 +3,8 @@ package models
 import (
 	"fmt"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/dynamodb"
+	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 )
 
 type Claim struct {
@@ -40,33 +40,48 @@ type Claim struct {
 	UpdatedAt             int64   `json:"updatedAt"`
 }
 
-func (c *Claim) ConvertToDynamodbAttributes() map[string]*dynamodb.AttributeValue {
-	return map[string]*dynamodb.AttributeValue{
-		"claimId":             {S: aws.String(c.ClaimID)},
-		"claimNumber":         {S: aws.String(c.ClaimNumber)},
-		"insured":             {S: aws.String(c.Insured)},
-		"claimCost":           {N: aws.String(fmt.Sprintf("%.2f", c.ClaimCost))},
-		"closingCost":         {N: aws.String(fmt.Sprintf("%.2f", c.ClosingCost))},
-		"status":              {S: aws.String(c.Status)},
-		"description":         {S: aws.String(c.Description)},
-		"clientId":            {S: aws.String(c.ClientID)},
-		"assignedUserId":      {S: aws.String(c.AssignedUserID)},
-		"creatorId":           {S: aws.String(c.CreatorID)},
-		"workflowStep":        {S: aws.String(c.WorkflowStep)},
-		"contactPerson":       {S: aws.String(c.ContactPerson)},
-		"claimantAddress":     {S: aws.String(c.ClaimantAddress)},
-		"dateOfLoss":          {N: aws.String(fmt.Sprintf("%d", c.DateOfLoss))},
-		"claimantName":        {S: aws.String(c.ClaimantName)},
-		"claimantContact":     {S: aws.String(c.ClaimantContact)},
-		"claimantPhone":       {S: aws.String(c.ClaimantPhone)},
-		"claimantEmail":       {S: aws.String(c.ClaimantEmail)},
-		"contactPhone":        {S: aws.String(c.ContactPhone)},
-		"contactEmail":        {S: aws.String(c.ContactEmail)},
-		"clientBillingMethod": {S: aws.String(c.ClientBillingMethod)},
-		"billablePercentage":  {N: aws.String(fmt.Sprintf("%.2f", c.BillablePercentage))},
-		"billableHours":       {N: aws.String(fmt.Sprintf("%.2f", c.BillableHours))},
-		"billableHourlyRate":  {N: aws.String(fmt.Sprintf("%.2f", c.BillableHourlyRate))},
-		"createdAt":           {N: aws.String(fmt.Sprintf("%d", c.CreatedAt))},
-		"updatedAt":           {N: aws.String(fmt.Sprintf("%d", c.UpdatedAt))},
+func (c *Claim) ConvertToDynamodbAttributes() (map[string]types.AttributeValue, error) {
+	// Manually format float fields as currency strings
+	claimCost := fmt.Sprintf("%.2f", c.ClaimCost)
+	closingCost := fmt.Sprintf("%.2f", c.ClosingCost)
+	billablePercentage := fmt.Sprintf("%.2f", c.BillablePercentage)
+	billableHours := fmt.Sprintf("%.2f", c.BillableHours)
+	billableHourlyRate := fmt.Sprintf("%.2f", c.BillableHourlyRate)
+
+	// Create a temporary map with formatted strings for float fields
+	tempClaimMap := map[string]interface{}{
+		"claimId":             c.ClaimID,
+		"claimNumber":         c.ClaimNumber,
+		"insured":             c.Insured,
+		"claimCost":           claimCost,
+		"closingCost":         closingCost,
+		"status":              c.Status,
+		"description":         c.Description,
+		"clientId":            c.ClientID,
+		"assignedUserId":      c.AssignedUserID,
+		"creatorId":           c.CreatorID,
+		"workflowStep":        c.WorkflowStep,
+		"contactPerson":       c.ContactPerson,
+		"claimantAddress":     c.ClaimantAddress,
+		"dateOfLoss":          fmt.Sprintf("%d", c.DateOfLoss),
+		"claimantName":        c.ClaimantName,
+		"claimantContact":     c.ClaimantContact,
+		"claimantPhone":       c.ClaimantPhone,
+		"claimantEmail":       c.ClaimantEmail,
+		"contactPhone":        c.ContactPhone,
+		"contactEmail":        c.ContactEmail,
+		"clientBillingMethod": c.ClientBillingMethod,
+		"billablePercentage":  billablePercentage,
+		"billableHours":       billableHours,
+		"billableHourlyRate":  billableHourlyRate,
+		"createdAt":           fmt.Sprintf("%d", c.CreatedAt),
+		"updatedAt":           fmt.Sprintf("%d", c.UpdatedAt),
 	}
+
+	av, err := attributevalue.MarshalMap(tempClaimMap)
+	if err != nil {
+		return nil, err
+	}
+
+	return av, nil
 }
