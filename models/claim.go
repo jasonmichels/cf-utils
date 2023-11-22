@@ -1,8 +1,6 @@
 package models
 
 import (
-	"fmt"
-
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 )
@@ -42,19 +40,19 @@ type Claim struct {
 
 func (c *Claim) ConvertToDynamodbAttributes() (map[string]types.AttributeValue, error) {
 	// Manually format float fields as currency strings
-	claimCost := fmt.Sprintf("%.2f", c.ClaimCost)
-	closingCost := fmt.Sprintf("%.2f", c.ClosingCost)
-	billablePercentage := fmt.Sprintf("%.2f", c.BillablePercentage)
-	billableHours := fmt.Sprintf("%.2f", c.BillableHours)
-	billableHourlyRate := fmt.Sprintf("%.2f", c.BillableHourlyRate)
+	// claimCost := fmt.Sprintf("%.2f", c.ClaimCost)
+	// closingCost := fmt.Sprintf("%.2f", c.ClosingCost)
+	// billablePercentage := fmt.Sprintf("%.2f", c.BillablePercentage)
+	// billableHours := fmt.Sprintf("%.2f", c.BillableHours)
+	// billableHourlyRate := fmt.Sprintf("%.2f", c.BillableHourlyRate)
 
 	// Create a temporary map with formatted strings for float fields
 	tempClaimMap := map[string]interface{}{
 		"claimId":             c.ClaimID,
 		"claimNumber":         c.ClaimNumber,
 		"insured":             c.Insured,
-		"claimCost":           claimCost,
-		"closingCost":         closingCost,
+		"claimCost":           c.ClaimCost,
+		"closingCost":         c.ClosingCost,
 		"status":              c.Status,
 		"description":         c.Description,
 		"clientId":            c.ClientID,
@@ -63,7 +61,7 @@ func (c *Claim) ConvertToDynamodbAttributes() (map[string]types.AttributeValue, 
 		"workflowStep":        c.WorkflowStep,
 		"contactPerson":       c.ContactPerson,
 		"claimantAddress":     c.ClaimantAddress,
-		"dateOfLoss":          fmt.Sprintf("%d", c.DateOfLoss),
+		"dateOfLoss":          c.DateOfLoss,
 		"claimantName":        c.ClaimantName,
 		"claimantContact":     c.ClaimantContact,
 		"claimantPhone":       c.ClaimantPhone,
@@ -71,11 +69,11 @@ func (c *Claim) ConvertToDynamodbAttributes() (map[string]types.AttributeValue, 
 		"contactPhone":        c.ContactPhone,
 		"contactEmail":        c.ContactEmail,
 		"clientBillingMethod": c.ClientBillingMethod,
-		"billablePercentage":  billablePercentage,
-		"billableHours":       billableHours,
-		"billableHourlyRate":  billableHourlyRate,
-		"createdAt":           fmt.Sprintf("%d", c.CreatedAt),
-		"updatedAt":           fmt.Sprintf("%d", c.UpdatedAt),
+		"billablePercentage":  c.BillablePercentage,
+		"billableHours":       c.BillableHours,
+		"billableHourlyRate":  c.BillableHourlyRate,
+		"createdAt":           c.CreatedAt,
+		"updatedAt":           c.UpdatedAt,
 	}
 
 	av, err := attributevalue.MarshalMap(tempClaimMap)
