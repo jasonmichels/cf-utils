@@ -6,36 +6,36 @@ import (
 )
 
 type Claim struct {
-	ClaimID               string  `json:"claimId"`
-	ClaimNumber           string  `json:"claimNumber"`
-	Insured               string  `json:"insured"`
-	ClaimCost             float32 `json:"claimCost"`
-	ClosingCost           float32 `json:"closingCost"`
-	Status                string  `json:"status"`
-	Description           string  `json:"description"`
-	ClientID              string  `json:"clientId"`
-	AssignedUserID        string  `json:"assignedUserId"`
-	AssignedUserFirstName string  `json:"assignedUserFirstName"`
-	AssignedUserLastName  string  `json:"assignedUserLastName"`
-	CreatorID             string  `json:"creatorId"`
-	CreatorFirstName      string  `json:"creatorFirstName"`
-	CreatorLastName       string  `json:"creatorLastName"`
-	WorkflowStep          string  `json:"workflowStep"`
-	ContactPerson         string  `json:"contactPerson"`
-	ClaimantAddress       string  `json:"claimantAddress"`
-	DateOfLoss            int64   `json:"dateOfLoss"`
-	ClaimantName          string  `json:"claimantName"`
-	ClaimantContact       string  `json:"claimantContact"`
-	ClaimantPhone         string  `json:"claimantPhone"`
-	ClaimantEmail         string  `json:"claimantEmail"`
-	ContactPhone          string  `json:"contactPhone"`
-	ContactEmail          string  `json:"contactEmail"`
-	ClientBillingMethod   string  `json:"clientBillingMethod"`
-	BillablePercentage    float32 `json:"billablePercentage"`
-	BillableHours         float32 `json:"billableHours"`
-	BillableHourlyRate    float32 `json:"billableHourlyRate"`
-	CreatedAt             int64   `json:"createdAt"`
-	UpdatedAt             int64   `json:"updatedAt"`
+	ClaimID               string `json:"claimId"`
+	ClaimNumber           string `json:"claimNumber"`
+	Insured               string `json:"insured"`
+	ClaimCost             string `json:"claimCost"`
+	ClosingCost           string `json:"closingCost"`
+	Status                string `json:"status"`
+	Description           string `json:"description"`
+	ClientID              string `json:"clientId"`
+	AssignedUserID        string `json:"assignedUserId"`
+	AssignedUserFirstName string `json:"assignedUserFirstName"`
+	AssignedUserLastName  string `json:"assignedUserLastName"`
+	CreatorID             string `json:"creatorId"`
+	CreatorFirstName      string `json:"creatorFirstName"`
+	CreatorLastName       string `json:"creatorLastName"`
+	WorkflowStep          string `json:"workflowStep"`
+	ContactPerson         string `json:"contactPerson"`
+	ClaimantAddress       string `json:"claimantAddress"`
+	DateOfLoss            string `json:"dateOfLoss"`
+	ClaimantName          string `json:"claimantName"`
+	ClaimantContact       string `json:"claimantContact"`
+	ClaimantPhone         string `json:"claimantPhone"`
+	ClaimantEmail         string `json:"claimantEmail"`
+	ContactPhone          string `json:"contactPhone"`
+	ContactEmail          string `json:"contactEmail"`
+	ClientBillingMethod   string `json:"clientBillingMethod"`
+	BillablePercentage    string `json:"billablePercentage"`
+	BillableHours         string `json:"billableHours"`
+	BillableHourlyRate    string `json:"billableHourlyRate"`
+	CreatedAt             string `json:"createdAt"`
+	UpdatedAt             string `json:"updatedAt"`
 }
 
 func (c *Claim) ConvertToDynamodbAttributes() (map[string]types.AttributeValue, error) {
