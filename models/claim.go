@@ -83,3 +83,27 @@ func (c *Claim) ConvertToDynamodbAttributes() (map[string]types.AttributeValue, 
 
 	return av, nil
 }
+
+func EnrichClaims(claims []Claim, users []User) ([]Claim, error) {
+	enrichedClaims := make([]Claim, len(claims))
+
+	for i, claim := range claims {
+		enrichedClaim := claim
+
+		// Fetch and set assigned user details
+		if assignedUser, err := GetUserByID(claim.AssignedUserID, users); err == nil {
+			enrichedClaim.AssignedUserFirstName = assignedUser.FirstName
+			enrichedClaim.AssignedUserLastName = assignedUser.LastName
+		}
+
+		// Fetch and set creator user details
+		if creatorUser, err := GetUserByID(claim.CreatorID, users); err == nil {
+			enrichedClaim.CreatorFirstName = creatorUser.FirstName
+			enrichedClaim.CreatorLastName = creatorUser.LastName
+		}
+
+		enrichedClaims[i] = enrichedClaim
+	}
+
+	return enrichedClaims, nil
+}
