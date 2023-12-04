@@ -34,18 +34,12 @@ type Claim struct {
 	BillablePercentage    string `json:"billablePercentage"`
 	BillableHours         string `json:"billableHours"`
 	BillableHourlyRate    string `json:"billableHourlyRate"`
+	ThreadID              string `json:"threadId"`
 	CreatedAt             string `json:"createdAt"`
 	UpdatedAt             string `json:"updatedAt"`
 }
 
 func (c *Claim) ConvertToDynamodbAttributes() (map[string]types.AttributeValue, error) {
-	// Manually format float fields as currency strings
-	// claimCost := fmt.Sprintf("%.2f", c.ClaimCost)
-	// closingCost := fmt.Sprintf("%.2f", c.ClosingCost)
-	// billablePercentage := fmt.Sprintf("%.2f", c.BillablePercentage)
-	// billableHours := fmt.Sprintf("%.2f", c.BillableHours)
-	// billableHourlyRate := fmt.Sprintf("%.2f", c.BillableHourlyRate)
-
 	// Create a temporary map with formatted strings for float fields
 	tempClaimMap := map[string]interface{}{
 		"claimId":             c.ClaimID,
@@ -72,6 +66,7 @@ func (c *Claim) ConvertToDynamodbAttributes() (map[string]types.AttributeValue, 
 		"billablePercentage":  c.BillablePercentage,
 		"billableHours":       c.BillableHours,
 		"billableHourlyRate":  c.BillableHourlyRate,
+		"threadId":            c.ThreadID,
 		"createdAt":           c.CreatedAt,
 		"updatedAt":           c.UpdatedAt,
 	}
