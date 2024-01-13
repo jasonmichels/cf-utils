@@ -10,6 +10,7 @@ type Client struct {
 	Name        string `json:"name"`
 	Contact     string `json:"contact"`
 	Phone       string `json:"phone"`
+	Email       string `json:"email"`
 	Description string `json:"description"`
 	CreatedAt   string `json:"createdAt"`
 	UpdatedAt   string `json:"updatedAt"`
@@ -21,6 +22,7 @@ func (c *Client) ConvertToDynamodbAttributes() (map[string]types.AttributeValue,
 		"name":        c.Name,
 		"contact":     c.Contact,
 		"phone":       c.Phone,
+		"email":       c.Email,
 		"description": c.Description,
 		"createdAt":   c.CreatedAt,
 		"updatedAt":   c.UpdatedAt,
