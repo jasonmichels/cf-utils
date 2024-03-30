@@ -40,6 +40,7 @@ type Claim struct {
 	BillableHours         string `json:"billableHours"`
 	BillableHourlyRate    string `json:"billableHourlyRate"`
 	ThreadID              string `json:"threadId"`
+	InvoiceEmail          string `json:"invoiceEmail"`
 	Files                 []File `json:"files"`
 	CreatedAt             string `json:"createdAt"`
 	UpdatedAt             string `json:"updatedAt"`
@@ -73,6 +74,7 @@ func (c *Claim) ConvertToDynamodbAttributes() (map[string]types.AttributeValue, 
 		"billableHours":       c.BillableHours,
 		"billableHourlyRate":  c.BillableHourlyRate,
 		"threadId":            c.ThreadID,
+		"invoiceEmail":        c.InvoiceEmail,
 		"createdAt":           c.CreatedAt,
 		"updatedAt":           c.UpdatedAt,
 	}
